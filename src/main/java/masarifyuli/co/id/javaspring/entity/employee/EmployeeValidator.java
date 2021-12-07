@@ -13,9 +13,9 @@ public class EmployeeValidator implements Validator {
     public void validate(Object obj, Errors err) {
         Employee o = (Employee) obj;
         new RequiredValidation("Username", o.getUsername());
-        new RequiredValidation("name", o.getName());
-        new RequiredValidation("password", o.getPassword());
-        new RequiredValidation("address", o.getAddress());
+        new RequiredValidation("Name", o.getName());
+        new RequiredValidation("Password", o.getPassword());
+        new RequiredValidation("Address", o.getAddress());
     }
 
 

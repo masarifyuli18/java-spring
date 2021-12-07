@@ -1,8 +1,12 @@
 package masarifyuli.co.id.javaspring.entity.employee;
 
 import masarifyuli.co.id.javaspring.entity.BasicEntity;
+import masarifyuli.co.id.javaspring.security.model.AuthUserDetails;
+import masarifyuli.co.id.javaspring.security.model.AuthUserDetailsCompatible;
+import masarifyuli.co.id.javaspring.util.Util;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(
@@ -10,7 +14,7 @@ import javax.persistence.*;
                 @UniqueConstraint(columnNames = "username", name = "_uniqueUsername")
         }
 )
-public class Employee extends BasicEntity {
+public class Employee extends BasicEntity implements AuthUserDetailsCompatible {
     @Column(nullable = false, length = 15)
     private String username;
     @Column(nullable = false, length = 30)
@@ -28,7 +32,7 @@ public class Employee extends BasicEntity {
     @Column(length = 20)
     private String mobileNo;
 
-    enum Gender {MALE, FEMALE, UNDEFINED}
+    public enum Gender {MALE, FEMALE, UNDEFINED}
 
     public Employee() {
     }
@@ -99,7 +103,13 @@ public class Employee extends BasicEntity {
 
     @PrePersist
     public void beforeSave() {
-        System.out.println("Event before save");
+        Util u = new Util();
+        this.password = u.encodePassword(this.password);
+    }
+
+    @Override
+    public AuthUserDetails toAuthUserDetails(List<String> roles) {
+        return new AuthUserDetails(username, password, roles, true);
     }
 
 
